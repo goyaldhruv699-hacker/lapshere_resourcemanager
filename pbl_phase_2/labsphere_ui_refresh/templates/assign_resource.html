@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Assign resource{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('dashboard') }}">Overview</a> / Assign resource{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow dark-eyebrow">RESOURCE ALLOCATION</div><h1>Assign a resource</h1><p class="muted">Match available lab equipment with a student or faculty member.</p></div><a class="btn btn-outline" href="{{ url_for('view_resources') }}">View inventory <span>↗</span></a></div>
+<div class="form-layout"><div class="panel form-panel"><div class="panel-heading"><div><h2>Allocation details</h2><p>Select a person and the resource they need.</p></div><span class="step-chip">STEP 01</span></div>
+{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+<form method="POST" class="form-stack">
+<label for="user">Assign to <span class="required">*</span></label><select class="text-input" id="user" name="user" required><option value="">Select a student or faculty member</option>{% for user in users %}<option value="{{ user['id'] }}">{{ user['name'] }}{% if user['role'] %} — {{ user['role'] }}{% endif %}</option>{% endfor %}</select>{% if not users %}<p class="field-hint">No people are registered in the users table yet. Add students or faculty in the database first.</p>{% endif %}
+<label for="resource">Available resource <span class="required">*</span></label><select class="text-input" id="resource" name="resource" required><option value="">Select equipment</option>{% for resource in resources %}<option value="{{ resource['id'] }}">{{ resource['resource_name'] }} — {{ resource['resource_type'] }}</option>{% endfor %}</select>{% if not resources %}<p class="field-hint">No resources are currently available. Add a resource or release an allocated item first.</p>{% endif %}
+<div class="info-note"><span>✓</span><p>Once assigned, the resource status changes to <strong>Allocated</strong> automatically.</p></div>
+<div class="form-actions"><a class="btn btn-ghost" href="{{ url_for('view_resources') }}">Cancel</a><button class="btn btn-primary" type="submit" {% if not users or not resources %}disabled{% endif %}>Confirm assignment <span>→</span></button></div>
+</form></div><aside class="side-tip"><div class="tip-icon purple-tip">⇄</div><h3>Smart allocation</h3><p>Only resources marked as available appear in this form, helping avoid accidental double assignments.</p><div class="allocation-steps"><div><span>1</span><p><strong>Choose a person</strong><small>Student or faculty member</small></p></div><div><span>2</span><p><strong>Choose equipment</strong><small>Only available items</small></p></div><div><span>3</span><p><strong>Confirm assignment</strong><small>Status updates automatically</small></p></div></div></aside></div>
+{% endblock %}

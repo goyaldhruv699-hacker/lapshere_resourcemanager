@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Add resource{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('dashboard') }}">Overview</a> / Add resource{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow dark-eyebrow">INVENTORY MANAGEMENT</div><h1>Add a resource</h1><p class="muted">Register new equipment so your team can track and assign it.</p></div><a class="btn btn-outline" href="{{ url_for('view_resources') }}">← Back to inventory</a></div>
+<div class="form-layout"><div class="panel form-panel"><div class="panel-heading"><div><h2>Resource details</h2><p>Fields marked with * are required.</p></div><span class="step-chip">NEW ITEM</span></div>
+{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+<form method="POST" class="form-stack">
+<label for="name">Resource name <span class="required">*</span></label><input class="text-input" id="name" name="name" placeholder="e.g. Desktop PC - 01" required>
+<label for="type">Resource type <span class="required">*</span></label><select class="text-input" id="type" name="type" required><option value="">Choose a category</option><option>Computer</option><option>Projector</option><option>Keyboard</option><option>Mouse</option><option>Electronics Kit</option><option>Networking Equipment</option><option>Other Equipment</option></select>
+<div class="info-note"><span>i</span><p>New resources are automatically marked as <strong>Available</strong> and can be assigned immediately.</p></div>
+<div class="form-actions"><a class="btn btn-ghost" href="{{ url_for('view_resources') }}">Cancel</a><button class="btn btn-primary" type="submit">Save resource <span>→</span></button></div>
+</form></div><aside class="side-tip"><div class="tip-icon">✦</div><h3>Keep your inventory accurate</h3><p>Use a clear, unique name for each item. This makes it easier for staff to identify the right equipment during lab sessions.</p><div class="tip-example"><small>EXAMPLE RESOURCE</small><strong>Desktop PC - 01</strong><span>Computer · Available</span></div></aside></div>
+{% endblock %}

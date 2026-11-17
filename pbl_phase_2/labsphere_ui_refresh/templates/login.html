@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Sign in{% endblock %}
+{% block auth_content %}
+<div class="login-layout">
+  <section class="login-visual">
+    <a class="brand brand-light" href="{{ url_for('login') }}"><span class="brand-mark">L<span>+</span></span><span><strong>LabSphere</strong><small>RESOURCE MANAGER</small></span></a>
+    <div class="visual-copy"><span class="eyebrow"><span class="pulse-dot"></span> SMARTER LAB OPERATIONS</span><h1>Your lab.<br>Under control.</h1><p>A simpler way to track equipment, manage availability, and keep every lab session running smoothly.</p></div>
+    <div class="visual-art"><div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div><div class="art-device"><div class="device-screen"><div class="screen-bar"><i></i><i></i><i></i></div><div class="screen-title"></div><div class="screen-row"><b></b><span></span></div><div class="screen-row"><b></b><span></span></div><div class="screen-row"><b></b><span></span></div></div><div class="device-stand"></div><div class="device-base"></div></div><div class="floating-card float-a"><span class="float-check">✓</span><span><b>Resource ready</b><small>Available to assign</small></span></div><div class="floating-card float-b"><span class="float-chart">↗</span><span><b>Stay organised</b><small>All in one workspace</small></span></div></div>
+    <div class="visual-foot">A CLEAR VIEW OF EVERY RESOURCE <span>© LabSphere</span></div>
+  </section>
+  <section class="login-panel"><div class="login-card"><div class="login-symbol">↗</div><div class="eyebrow dark-eyebrow">WELCOME BACK</div><h2>Sign in to LabSphere</h2><p class="muted">Enter your account details to continue.</p>
+    {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+    <form method="POST" class="form-stack">
+      <label for="username">Username</label><div class="input-wrap"><span>♙</span><input id="username" name="username" placeholder="Enter your username" autocomplete="username" required></div>
+      <label for="password">Password</label><div class="input-wrap"><span>⌑</span><input id="password" type="password" name="password" placeholder="Enter your password" autocomplete="current-password" required><button class="password-toggle" type="button" data-toggle-password="password" aria-label="Show password">Show</button></div>
+      <button class="btn btn-primary btn-full" type="submit">Sign in <span>→</span></button>
+    </form>
+    <div class="demo-box"><strong>Demo access</strong><div><span>Admin</span><code>admin / admin123</code></div><div><span>Staff</span><code>staff / staff123</code></div></div>
+    <p class="login-note"><span>▣</span> Secure access for authorised lab personnel</p>
+  </div></section>
+</div>
+{% endblock %}

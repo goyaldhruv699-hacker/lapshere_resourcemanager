@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Virtual hypervisor{% endblock %}
+{% block breadcrumb %}Virtual hypervisor{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow dark-eyebrow">COMPUTE LAB</div><h1>Virtual hypervisor</h1><p class="muted">Create and manage virtual machine profiles for your lab.</p></div><span class="step-chip">SIMULATED VM CONTROL</span></div>
+<div class="hypervisor-note"><strong>Local simulation</strong><span>VM records and power states are managed in this app. A hypervisor such as VirtualBox, Hyper-V, or KVM is not connected.</span></div>
+<div class="hypervisor-layout">
+  <section class="panel form-panel"><div class="panel-heading"><div><h2>Create a virtual machine</h2><p>Choose a profile for your lab workload.</p></div><span class="step-chip">NEW VM</span></div>
+  {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+  <form method="POST" class="form-stack">
+    <label for="name">Machine name <span class="required">*</span></label><input class="text-input" id="name" name="name" maxlength="60" placeholder="e.g. Ubuntu Lab 01" required>
+    <label for="os_type">Operating system <span class="required">*</span></label><select class="text-input" id="os_type" name="os_type" required><option value="">Choose an operating system</option><option>Ubuntu Linux</option><option>Debian Linux</option><option>Windows 11</option><option>Windows Server</option><option>Other Linux</option></select>
+    <div class="vm-resource-grid"><div><label for="cpu">Virtual CPUs</label><select class="text-input" id="cpu" name="cpu"><option>1</option><option>2</option><option>4</option><option>8</option></select></div><div><label for="memory_mb">Memory</label><select class="text-input" id="memory_mb" name="memory_mb"><option value="512">512 MB</option><option value="1024">1 GB</option><option value="2048" selected>2 GB</option><option value="4096">4 GB</option><option value="8192">8 GB</option></select></div><div><label for="disk_gb">Disk</label><select class="text-input" id="disk_gb" name="disk_gb"><option value="10">10 GB</option><option value="20" selected>20 GB</option><option value="40">40 GB</option><option value="80">80 GB</option><option value="160">160 GB</option></select></div></div>
+    <div class="info-note"><span>i</span><p>Creating a profile does not install an operating system or reserve physical CPU, memory, or disk.</p></div>
+    <div class="form-actions"><button class="btn btn-primary" type="submit">Create VM <span>→</span></button></div>
+  </form></section>
+  <section class="panel vm-panel"><div class="panel-heading"><div><h2>Virtual machines</h2><p>{{ machines|length }} machine{{ '' if machines|length == 1 else 's' }} in this lab.</p></div></div>
+  {% if machines %}<div class="vm-list">{% for vm in machines %}<article class="vm-card"><div class="vm-card-top"><div class="vm-symbol">▣</div><span class="vm-status {{ 'vm-running' if vm.status == 'Running' else 'vm-stopped' }}"><i></i>{{ vm.status }}</span></div><h3>{{ vm.name }}</h3><p class="vm-os">{{ vm.os_type }}</p><div class="vm-specs"><span><strong>{{ vm.cpu }}</strong> vCPU</span><span><strong>{{ (vm.memory_mb / 1024)|round(1) }}</strong> GB RAM</span><span><strong>{{ vm.disk_gb }}</strong> GB disk</span></div><div class="vm-meta">Created {{ vm.created_at }}</div><div class="vm-actions">
+  {% if vm.status == 'Stopped' %}<form method="POST" action="{{ url_for('vm_action', vm_id=vm.id, action='start') }}"><button class="action-btn action-assign" type="submit">Start</button></form>{% else %}<form method="POST" action="{{ url_for('vm_action', vm_id=vm.id, action='stop') }}"><button class="action-btn action-release" type="submit">Stop</button></form><form method="POST" action="{{ url_for('vm_action', vm_id=vm.id, action='restart') }}"><button class="action-btn action-assign" type="submit">Restart</button></form>{% endif %}
+  {% if vm.status == 'Stopped' %}<form method="POST" action="{{ url_for('vm_action', vm_id=vm.id, action='delete') }}" onsubmit="return confirm('Delete this VM profile?')"><button class="action-btn action-delete" type="submit" aria-label="Delete {{ vm.name }}">×</button></form>{% endif %}</div></article>{% endfor %}</div>{% else %}<div class="empty-state"><span class="empty-icon">▣</span><strong>No virtual machines yet</strong><p>Create a machine profile to see it listed here.</p></div>{% endif %}
+  </section>
+</div>
+{% endblock %}

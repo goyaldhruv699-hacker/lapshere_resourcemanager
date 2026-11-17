@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}LabSphere{% endblock %} | Lab Resource Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='hypervisor.css') }}">
+</head>
+<body>
+{% if session.get('logged_in') %}
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('dashboard') }}">
+      <span class="brand-mark">L<span>+</span></span>
+      <span><strong>LabSphere</strong><small>RESOURCE MANAGER</small></span>
+    </a>
+    <div class="side-label">WORKSPACE</div>
+    <nav class="nav-menu">
+      <a class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}"><span class="nav-icon">▦</span> Overview</a>
+      <a class="nav-link {% if request.endpoint == 'view_resources' %}active{% endif %}" href="{{ url_for('view_resources') }}"><span class="nav-icon">▤</span> Resources</a>
+      <a class="nav-link {% if request.endpoint == 'assign_resource' %}active{% endif %}" href="{{ url_for('assign_resource') }}"><span class="nav-icon">⇄</span> Assign resource</a>
+      <a class="nav-link {% if request.endpoint in ('hypervisor', 'vm_action') %}active{% endif %}" href="{{ url_for('hypervisor') }}"><span class="nav-icon">▣</span> Virtual hypervisor</a>
+      {% if session.get('user_role') == 'admin' %}
+      <a class="nav-link {% if request.endpoint == 'add_resource' %}active{% endif %}" href="{{ url_for('add_resource') }}"><span class="nav-icon">＋</span> Add resource</a>
+      {% endif %}
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="help-card"><div class="help-icon">✦</div><strong>Need a hand?</strong><p>Keep your lab organised and resources easy to find.</p><a href="{{ url_for('view_resources') }}">View resources <span>→</span></a></div>
+      <a class="nav-link logout-link" href="{{ url_for('logout') }}"><span class="nav-icon">↪</span> Log out</a>
+    </div>
+  </aside>
+  <main class="main-area">
+    <header class="topbar">
+      <div class="mobile-brand"><span class="brand-mark">L<span>+</span></span><strong>LabSphere</strong></div>
+      <div class="breadcrumb">Workspace <span>/</span> {% block breadcrumb %}Overview{% endblock %}</div>
+      <div class="top-user"><div class="avatar">{{ session.get('user_role','U')[0]|upper }}</div><div><strong>{{ session.get('user_role','User')|title }}</strong><small>{{ 'Administrator' if session.get('user_role') == 'admin' else 'Staff account' }}</small></div></div>
+    </header>
+    <section class="page-content">
+      {% block content %}{% endblock %}
+      <footer class="footer">LabSphere <span>•</span> College Lab Resource Management <span class="footer-right">Built for a better-organised lab</span></footer>
+    </section>
+  </main>
+</div>
+{% else %}
+{% block auth_content %}{% endblock %}
+{% endif %}
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
